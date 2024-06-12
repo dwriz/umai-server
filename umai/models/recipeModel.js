@@ -13,11 +13,22 @@ class RecipeModel {
       throw error;
     }
   }
+
   static async findById(id) {
     try {
       const result = await collection.findOne({ _id: new ObjectId(id) });
 
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async create(data) {
+    try {
+      const { insertedId } = await collection.insertOne(data);
+
+      return await this.findById(insertedId);
     } catch (error) {
       throw error;
     }
