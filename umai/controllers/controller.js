@@ -1,4 +1,5 @@
 const { UserModel } = require("../models/userModel");
+
 class Controller {
   static async register(req, res, next) {
     try {
@@ -11,6 +12,14 @@ class Controller {
       });
     } catch (error) {
       res.send(error);
+    }
+  }
+  static async login(req, res, next) {
+    try {
+      const access_token = await UserModel.login(req.body);
+      res.status(200).json({ access_token });
+    } catch (error) {
+      next(error);
     }
   }
 }
