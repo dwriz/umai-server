@@ -1,6 +1,7 @@
+const { RecipeModel } = require("../models/recipesModel");
 const { UserModel } = require("../models/userModel");
 
-class Controller {
+class UserController {
   static async register(req, res, next) {
     try {
       const newUser = req.body;
@@ -24,4 +25,4 @@ class Controller {
   }
 }
 
-module.exports = { Controller };
+module.exports = { UserController };

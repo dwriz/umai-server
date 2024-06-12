@@ -71,6 +71,7 @@ class UserModel {
     });
     return access_token;
   }
+  
 }
 
 module.exports = { UserModel };
