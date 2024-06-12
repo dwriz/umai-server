@@ -53,7 +53,14 @@ class UserModel {
   static async findById(id) {
     try {
       const result = await collection.findOne({ _id: new ObjectId(id) });
-      console.log(result);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async findByUsername(username) {
+    try {
+      const result = await collection.findOne({ username: username });
       return result;
     } catch (error) {
       throw error;

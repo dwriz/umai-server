@@ -15,7 +15,6 @@ async function authentication(req, res, next) {
       throw { name: "Error authentication" };
     }
     const user = await UserModel.findById(_id);
-    console.log(user);
     if (!user) throw { name: "Error authentication" };
     req.user = user;
     next();

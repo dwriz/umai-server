@@ -12,7 +12,7 @@ class UserController {
         fullname: newUser.fullname,
       });
     } catch (error) {
-      res.send(error);
+      next(error);
     }
   }
   static async login(req, res, next) {
