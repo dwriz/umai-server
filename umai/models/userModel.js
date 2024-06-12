@@ -3,6 +3,7 @@ const validator = require("validator");
 const { hashPass } = require("../helpers/bcrypt");
 const { comparePass } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
+const { ObjectId } = require("mongodb");
 
 const collection = DB.collection("users");
 class UserModel {
@@ -49,6 +50,15 @@ class UserModel {
       throw error;
     }
   }
+  static async findById(id) {
+    try {
+      const result = await collection.findOne({ _id: new ObjectId(id) });
+      console.log(result);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
   static async login(userLogin) {
     if (!userLogin.email || !userLogin.password) {
       throw new Error("Email and Password are required");
@@ -71,7 +81,6 @@ class UserModel {
     });
     return access_token;
   }
-  
 }
 
 module.exports = { UserModel };
