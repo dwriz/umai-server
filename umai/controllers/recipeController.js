@@ -1,5 +1,4 @@
 const { RecipeModel } = require("../models/recipeModel");
-const { ObjectId } = require("mongodb");
 
 class RecipeController {
   static async getAllRecipe(req, res, next) {
@@ -16,7 +15,11 @@ class RecipeController {
     try {
       const { id } = req.params;
 
-      const result = await RecipeModel.findById({ _id: new ObjectId(id) });
+      const result = await RecipeModel.findById(id);
+
+      if (!result) {
+        throw new Error("RECIPE_NOT_FOUND");
+      }
 
       res.status(200).json(result);
     } catch (error) {

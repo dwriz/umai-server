@@ -1,12 +1,33 @@
 const { DB } = require("../config/mongodb");
 const { ObjectId } = require("mongodb");
 
-const collection = DB.collection("recipes");
+const recipeCollection = DB.collection("recipes");
+const userCollection = DB.collection("users");
 
 class RecipeModel {
   static async findAll() {
     try {
-      const result = await collection.find().toArray();
+      const result = await recipeCollection
+        .aggregate([
+          {
+            $lookup: {
+              from: "users",
+              localField: "userId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          {
+            $unwind: "$user",
+          },
+          {
+            $project: {
+              "user.password": 0,
+              "user.balance": 0,
+            },
+          },
+        ])
+        .toArray();
 
       return result;
     } catch (error) {
@@ -16,9 +37,32 @@ class RecipeModel {
 
   static async findById(id) {
     try {
-      const result = await collection.findOne({ _id: new ObjectId(id) });
+      const result = await recipeCollection
+        .aggregate([
+          {
+            $match: { _id: new ObjectId(id) },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "userId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          {
+            $unwind: "$user",
+          },
+          {
+            $project: {
+              "user.password": 0,
+              "user.balance": 0,
+            },
+          },
+        ])
+        .toArray();
 
-      return result;
+      return result.length > 0 ? result[0] : null;
     } catch (error) {
       throw error;
     }
@@ -26,7 +70,7 @@ class RecipeModel {
 
   static async create(data) {
     try {
-      const { insertedId } = await collection.insertOne(data);
+      const { insertedId } = await recipeCollection.insertOne(data);
 
       return await this.findById(insertedId);
     } catch (error) {
