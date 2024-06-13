@@ -25,6 +25,7 @@ class UserModel {
       if (existingUser) throw new Error("USER_ALREADY_REGISTERED");
 
       newUser.password = hashPassword(newUser.password);
+      newUser.balance = 0;
 
       const result = await collection.insertOne({
         ...newUser,
