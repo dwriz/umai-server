@@ -37,7 +37,7 @@ class RecipeController {
         ingredients,
         instructions,
         imgUrl,
-        userId: _id,
+        UserId: _id,
       });
 
       res.status(201).json(result);

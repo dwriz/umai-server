@@ -12,7 +12,7 @@ class RecipeModel {
           {
             $lookup: {
               from: "users",
-              localField: "userId",
+              localField: "UserId",
               foreignField: "_id",
               as: "user",
             },
@@ -45,7 +45,7 @@ class RecipeModel {
           {
             $lookup: {
               from: "users",
-              localField: "userId",
+              localField: "UserId",
               foreignField: "_id",
               as: "user",
             },
