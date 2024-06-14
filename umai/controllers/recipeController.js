@@ -1,4 +1,5 @@
 const { RecipeModel } = require("../models/recipeModel");
+const { cloudinary } = require("../helpers/cloudinary");
 
 class RecipeController {
   static async getAllRecipe(req, res, next) {
@@ -29,18 +30,27 @@ class RecipeController {
 
   static async createRecipe(req, res, next) {
     try {
-      const { name, ingredients, instructions, imgUrl } = req.body;
+      const { name, ingredients, instructions } = req.body;
       const { _id } = req.user;
 
       const result = await RecipeModel.create({
         name,
-        ingredients,
-        instructions,
-        imgUrl,
+        ingredients: JSON.parse(ingredients),
+        instructions: JSON.parse(instructions),
         UserId: _id,
       });
 
-      res.status(201).json(result);
+      const base64 = req.file.buffer.toString("base64");
+      const base64DataUrl = `data:${req.file.mimetype};base64,${base64}`;
+
+      const cloudinaryImgUrl = await cloudinary.uploader.upload(base64DataUrl, {
+        folder: "umai-recipe-img",
+        public_id: result._id.toString(),
+      });
+
+      const resultWithImg = await RecipeModel.addImgUrl(result._id.toString(), cloudinaryImgUrl.secure_url);
+
+      res.status(201).json(resultWithImg);
     } catch (error) {
       next(error);
     }

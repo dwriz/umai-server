@@ -2,7 +2,6 @@ const { DB } = require("../config/mongodb");
 const { ObjectId } = require("mongodb");
 
 const recipeCollection = DB.collection("recipes");
-const userCollection = DB.collection("users");
 
 class RecipeModel {
   static async findAll() {
@@ -73,6 +72,19 @@ class RecipeModel {
       const { insertedId } = await recipeCollection.insertOne(data);
 
       return await this.findById(insertedId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async addImgUrl(id, cloudinaryImgUrl) {
+    try {
+      const result = await recipeCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { imgUrl: cloudinaryImgUrl } }
+      );
+
+      return result;
     } catch (error) {
       throw error;
     }
