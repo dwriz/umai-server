@@ -30,25 +30,57 @@ class RecipeController {
 
   static async createRecipe(req, res, next) {
     try {
-      const { name, ingredients, instructions } = req.body;
-      const { _id } = req.user;
+      const _id = req.user._id;
+      const name = req.body.name;
+      const ingredients = req.body.ingredients;
+      let instructions = JSON.parse(req.body.instructions);
+
+      let tempInstructions = [];
+      instructions.forEach((instruction) => {
+        tempInstructions.push({
+          description: instruction.description,
+        });
+      });
 
       const result = await RecipeModel.create({
         name,
         ingredients: JSON.parse(ingredients),
-        instructions: JSON.parse(instructions),
         UserId: _id,
       });
 
-      const base64 = req.file.buffer.toString("base64");
-      const base64DataUrl = `data:${req.file.mimetype};base64,${base64}`;
+      for (const [
+        index,
+        instructionImg,
+      ] of req.files.instruction_images.entries()) {
+        let instructionImgBase64 = instructionImg.buffer.toString("base64");
+        let instructionImgBase64DataUrl = `data:${instructionImg.mimetype};base64,${instructionImgBase64}`;
 
-      const cloudinaryImgUrl = await cloudinary.uploader.upload(base64DataUrl, {
-        folder: "umai-recipe-img",
-        public_id: result._id.toString(),
-      });
+        let cloudinaryInstructionImgUrl = await cloudinary.uploader.upload(
+          instructionImgBase64DataUrl,
+          {
+            folder: "umai-recipe-img",
+            public_id: `${result._id.toString()}-instruction-img-${index}`,
+          }
+        );
 
-      const resultWithImg = await RecipeModel.addImgUrl(result._id.toString(), cloudinaryImgUrl.secure_url);
+        instructions[index].imgUrl = cloudinaryInstructionImgUrl.secure_url;
+      }
+
+      const recipeImgBase64 = req.files.image[0].buffer.toString("base64");
+      const recipeImgBase65DataUrl = `data:${req.files.image[0].mimetype};base64,${recipeImgBase64}`;
+      const cloudinaryImgUrl = await cloudinary.uploader.upload(
+        recipeImgBase65DataUrl,
+        {
+          folder: "umai-recipe-img",
+          public_id: `${result._id.toString()}-main-img`,
+        }
+      );
+
+      const resultWithImg = await RecipeModel.addImgUrl(
+        result._id.toString(),
+        cloudinaryImgUrl.secure_url,
+        instructions
+      );
 
       res.status(201).json(resultWithImg);
     } catch (error) {

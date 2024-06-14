@@ -77,11 +77,11 @@ class RecipeModel {
     }
   }
 
-  static async addImgUrl(id, cloudinaryImgUrl) {
+  static async addImgUrl(id, cloudinaryImgUrl, instructions) {
     try {
       const result = await recipeCollection.updateOne(
         { _id: new ObjectId(id) },
-        { $set: { imgUrl: cloudinaryImgUrl } }
+        { $set: { imgUrl: cloudinaryImgUrl, instructions } }
       );
 
       return result;
