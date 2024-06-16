@@ -7,10 +7,6 @@ class PostController {
       const { RecipeId } = req.body;
       const { _id } = req.user;
 
-      console.log(req.body, "<<<<<< req.body");
-      console.log(req.user, "<<<<<< req.user");
-      console.log(req.file, "<<<<<< req.file");
-
       const data = {
         RecipeId: RecipeId,
         UserId: _id.toString(),
@@ -35,6 +31,16 @@ class PostController {
       );
 
       res.status(201).json({ message: "Successfully created a post" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getAllPost(req, res, next) {
+    try {
+      const result = await PostModel.findAll();
+
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }

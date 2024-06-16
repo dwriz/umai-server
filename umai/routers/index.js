@@ -31,4 +31,6 @@ router.get("/recipe/:id", RecipeController.getRecipeById);
 
 router.post("/post",upload.single("postImg"), PostController.createPost);
 
+router.get("/posts", PostController.getAllPost);
+
 module.exports = router;

@@ -11,8 +11,6 @@ class PostModel {
       const { insertedId } = await postCollection.insertOne({
         RecipeId: new ObjectId(RecipeId),
         UserId: new ObjectId(UserId),
-        likes: [],
-        comments: [],
       });
 
       return await this.findById(insertedId);
@@ -37,6 +35,47 @@ class PostModel {
         { _id: new ObjectId(id) },
         { $set: { imgUrl } }
       );
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findAll() {
+    try {
+      const result = await postCollection
+        .aggregate([
+          {
+            $lookup: {
+              from: "recipes",
+              localField: "RecipeId",
+              foreignField: "_id",
+              as: "recipe",
+            },
+          },
+          {
+            $unwind: "$recipe",
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "UserId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          {
+            $unwind: "$user",
+          },
+          {
+            $project: {
+              "user.password": 0,
+              "user.balance": 0,
+            },
+          },
+        ])
+        .toArray();
 
       return result;
     } catch (error) {
