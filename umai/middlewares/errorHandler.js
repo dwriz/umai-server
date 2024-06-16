@@ -26,6 +26,9 @@ const errorHandler = (error, req, res, next) => {
     case "AUTHENTICATION_INVALID":
       res.status(401).json({ message: "authentication invalid" });
       break;
+    case "TOKEN_INVALID":
+      res.status(401).json({ message: "token invalid" });
+      break;
     case "RECIPE_NOT_FOUND":
       res.status(404).json({ message: "recipe not found" });
       break;
