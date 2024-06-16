@@ -1,11 +1,28 @@
 const { UserModel } = require("../models/userModel");
+const { cloudinary } = require("../helpers/cloudinary");
 
 class UserController {
   static async register(req, res, next) {
     try {
+      if (!req.file) throw new Error("PROFILE_IMAGE_NOT_FOUND");
       const newUser = req.body;
 
-      await UserModel.register(newUser);
+      const result = await UserModel.register(newUser);
+
+      const profileImgBase64 = req.file.buffer.toString("base64");
+      const profileImgBase64DataUrl = `data:${req.file.mimetype};base64,${profileImgBase64}`;
+      const cloudinaryProfileImgUrl = await cloudinary.uploader.upload(
+        profileImgBase64DataUrl,
+        {
+          folder: "umai-profile-img",
+          public_id: result.insertedId,
+        }
+      );
+
+      await UserModel.addProfileImgUrl(
+        result.insertedId.toString(),
+        cloudinaryProfileImgUrl.secure_url
+      );
 
       res.status(201).json({
         message: "User created successfully.",

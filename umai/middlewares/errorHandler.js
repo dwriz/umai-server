@@ -32,6 +32,9 @@ const errorHandler = (error, req, res, next) => {
     case "RECIPE_NOT_FOUND":
       res.status(404).json({ message: "recipe not found" });
       break;
+    case "PROFILE_IMAGE_NOT_FOUND":
+      res.status(400).json({ message: "profile image is required" });
+      break;
     default:
       res.status(500).json({ message: "internal server error" });
       break;

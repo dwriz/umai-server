@@ -9,7 +9,7 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.post("/register", UserController.register);
+router.post("/register", upload.single("profileImg"), UserController.register);
 router.post("/login", UserController.login);
 router.use(authentication);
 router.get("/recipes", RecipeController.getAllRecipe);

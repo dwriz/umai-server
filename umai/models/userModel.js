@@ -26,10 +26,24 @@ class UserModel {
 
       newUser.password = hashPassword(newUser.password);
       newUser.balance = 0;
+      newUser.finishedRecipeCount = 0;
 
       const result = await collection.insertOne({
         ...newUser,
       });
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async addProfileImgUrl(id, profileImgUrl) {
+    try {
+      const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { profileImgUrl } }
+      );
 
       return result;
     } catch (error) {
