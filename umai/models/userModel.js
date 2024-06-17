@@ -193,6 +193,85 @@ class UserModel {
       throw error;
     }
   }
+
+  static async findProfile(id) {
+    try {
+      const result = await collection
+        .aggregate([
+          {
+            $match: { _id: new ObjectId(id) },
+          },
+          {
+            $lookup: {
+              from: "posts",
+              localField: "_id",
+              foreignField: "UserId",
+              as: "posts",
+            },
+          },
+          {
+            $lookup: {
+              from: "recipes",
+              localField: "_id",
+              foreignField: "UserId",
+              as: "recipes",
+            },
+          },
+          {
+            $unwind: {
+              path: "$posts",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $lookup: {
+              from: "recipes",
+              localField: "posts.RecipeId",
+              foreignField: "_id",
+              as: "postRecipe",
+            },
+          },
+          {
+            $unwind: {
+              path: "$postRecipe",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $group: {
+              _id: "$_id",
+              fullname: { $first: "$fullname" },
+              username: { $first: "$username" },
+              email: { $first: "$email" },
+              finishedRecipeCount: { $first: "$finishedRecipeCount" },
+              profileImgUrl: { $first: "$profileImgUrl" },
+              posts: {
+                $push: {
+                  _id: "$posts._id",
+                  RecipeId: "$posts.RecipeId",
+                  UserId: "$posts.UserId",
+                  imgUrl: "$posts.imgUrl",
+                  recipeName: "$postRecipe.name",
+                },
+              },
+              recipes: { $first: "$recipes" },
+            },
+          },
+          {
+            $project: {
+              "recipes.UserId": 0,
+              "recipes.ingredients": 0,
+              "recipes.instructions": 0,
+            },
+          },
+        ])
+        .toArray();
+
+      return result.length > 0 ? result[0] : null;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = { UserModel };

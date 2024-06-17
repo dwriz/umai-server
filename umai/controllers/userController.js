@@ -63,6 +63,18 @@ class UserController {
       next(error);
     }
   }
+  
+  static async getSelfProfile(req, res, next) {
+    try {
+      const { _id } = req.user;
+
+      const result = await UserModel.findProfile(_id);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = { UserController };

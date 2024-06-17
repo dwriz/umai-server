@@ -37,4 +37,6 @@ router.post("/finished-recipe", UserController.increaseFinishedRecipeCount);
 
 router.get("/ranking", UserController.getUsersRanking);
 
+router.get("/self", UserController.getSelfProfile);
+
 module.exports = router;
