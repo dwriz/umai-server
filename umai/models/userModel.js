@@ -166,6 +166,7 @@ class UserModel {
               email: { $first: "$email" },
               finishedRecipeCount: { $first: "$finishedRecipeCount" },
               profileImgUrl: { $first: "$profileImgUrl" },
+              balance: { $first: "$balance" },
               posts: {
                 $push: {
                   _id: "$posts._id",
@@ -245,6 +246,7 @@ class UserModel {
               email: { $first: "$email" },
               finishedRecipeCount: { $first: "$finishedRecipeCount" },
               profileImgUrl: { $first: "$profileImgUrl" },
+              balance: { $first: "$balance" },
               posts: {
                 $push: {
                   _id: "$posts._id",
