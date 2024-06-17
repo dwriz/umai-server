@@ -41,6 +41,28 @@ class UserController {
       next(error);
     }
   }
+
+  static async increaseFinishedRecipeCount(req, res, next) {
+    try {
+      const { _id } = req.user;
+
+      const result = await UserModel.incrementFinishedRecipeCount(_id);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async getUsersRanking(req, res, next) {
+    try {
+      const result = await UserModel.findAllWithPostsAndRecipes();
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = { UserController };

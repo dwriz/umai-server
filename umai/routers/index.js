@@ -29,8 +29,12 @@ router.post(
 
 router.get("/recipe/:id", RecipeController.getRecipeById);
 
-router.post("/post",upload.single("postImg"), PostController.createPost);
+router.post("/post", upload.single("postImg"), PostController.createPost);
 
 router.get("/posts", PostController.getAllPost);
+
+router.post("/finished-recipe", UserController.increaseFinishedRecipeCount);
+
+router.get("/ranking", UserController.getUsersRanking);
 
 module.exports = router;
