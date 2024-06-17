@@ -88,8 +88,7 @@ class UserController {
 
       res.status(200).json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
-      console.log(error, "<<<<<< error");
-      res.status(500).send({ error: error.message });
+      next(error);
     }
   }
 
