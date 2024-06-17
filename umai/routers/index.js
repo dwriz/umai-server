@@ -39,4 +39,8 @@ router.get("/ranking", UserController.getUsersRanking);
 
 router.get("/self", UserController.getSelfProfile);
 
+router.post("/create-payment-intent", UserController.createPaymentIntent);
+
+router.patch("/topup", UserController.addBalance);
+
 module.exports = router;

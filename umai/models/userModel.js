@@ -274,6 +274,19 @@ class UserModel {
       throw error;
     }
   }
+
+  static async incrementBalance(id, amount) {
+    try {
+      const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { balance: amount } }
+      );
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = { UserModel };

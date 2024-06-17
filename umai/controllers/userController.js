@@ -1,5 +1,6 @@
 const { UserModel } = require("../models/userModel");
 const { cloudinary } = require("../helpers/cloudinary");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 class UserController {
   static async register(req, res, next) {
@@ -63,12 +64,41 @@ class UserController {
       next(error);
     }
   }
-  
+
   static async getSelfProfile(req, res, next) {
     try {
       const { _id } = req.user;
 
       const result = await UserModel.findProfile(_id);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async createPaymentIntent(req, res, next) {
+    try {
+      const { amount } = req.body;
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+      });
+
+      res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+      console.log(error, "<<<<<< error");
+      res.status(500).send({ error: error.message });
+    }
+  }
+
+  static async addBalance(req, res, next) {
+    try {
+      const { _id } = req.user;
+      const { amount } = req.body;
+
+      const result = await UserModel.incrementBalance(_id, parseInt(amount));
 
       res.status(200).json(result);
     } catch (error) {
