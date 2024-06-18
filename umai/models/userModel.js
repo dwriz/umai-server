@@ -99,7 +99,7 @@ class UserModel {
         fullname: user.fullname,
       });
 
-      return access_token;
+      return { access_token, id: user._id };
     } catch (error) {
       throw error;
     }
@@ -280,6 +280,19 @@ class UserModel {
       const result = await collection.updateOne(
         { _id: new ObjectId(id) },
         { $inc: { balance: amount } }
+      );
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async decrementBalance(id, amount) {
+    try {
+      const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { balance: -amount } }
       );
 
       return result;

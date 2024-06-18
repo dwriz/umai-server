@@ -35,9 +35,9 @@ class UserController {
 
   static async login(req, res, next) {
     try {
-      const access_token = await UserModel.login(req.body);
+      const result = await UserModel.login(req.body);
 
-      res.status(200).json({ access_token });
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -79,6 +79,18 @@ class UserController {
     }
   }
 
+  static async getProfile(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const result = await UserModel.findProfile(id);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async createPaymentIntent(req, res, next) {
     try {
       const { amount } = req.body;
@@ -102,6 +114,20 @@ class UserController {
       const result = await UserModel.incrementBalance(_id, parseInt(amount));
 
       res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async donateBalance(req, res, next) {
+    try {
+      const { _id } = req.user;
+      const { amount, targetUserId } = req.body;
+
+      await UserModel.decrementBalance(_id, parseInt(amount));
+      await UserModel.incrementBalance(targetUserId, parseInt(amount));
+
+      res.status(200).json({ message: "donation success" });
     } catch (error) {
       next(error);
     }
