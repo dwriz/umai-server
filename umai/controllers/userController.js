@@ -49,7 +49,9 @@ class UserController {
 
       const result = await UserModel.incrementFinishedRecipeCount(_id);
 
-      res.status(200).json(result);
+      res
+        .status(200)
+        .json({ message: "Successfully Increase Finished Recipe" });
     } catch (error) {
       next(error);
     }

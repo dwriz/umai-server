@@ -82,7 +82,7 @@ class RecipeController {
         instructions
       );
 
-      res.status(201).json(resultWithImg);
+      res.status(201).json({ message: "Successfully created a recipe" });
     } catch (error) {
       next(error);
     }
