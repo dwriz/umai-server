@@ -1,5 +1,7 @@
 const errorHandler = (error, req, res, next) => {
-  console.log(error);
+  if (process.env.NODE_ENV !== 'test') {
+    console.log(error);
+  }
 
   switch (error.message) {
     case "FULLNAME_NOT_FOUND":
