@@ -115,7 +115,7 @@ class UserController {
 
       const result = await UserModel.incrementBalance(_id, parseInt(amount));
 
-      res.status(200).json(result);
+      res.status(200).json({ message: "topup success" });
     } catch (error) {
       next(error);
     }
