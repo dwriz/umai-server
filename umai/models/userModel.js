@@ -71,16 +71,6 @@ class UserModel {
     }
   }
 
-  static async findByUsername(username) {
-    try {
-      const result = await collection.findOne({ username });
-
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   static async login({ email, password }) {
     try {
       if (!email) throw new Error("EMAIL_NOT_FOUND");
