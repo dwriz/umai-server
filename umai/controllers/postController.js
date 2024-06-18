@@ -1,10 +1,12 @@
 const { PostModel } = require("../models/postModel");
-const {cloudinary} = require("../helpers/cloudinary");
+const { cloudinary } = require("../helpers/cloudinary");
 
 class PostController {
   static async createPost(req, res, next) {
     try {
+      if (!req.file) throw new Error("POST_IMAGE_NOT_FOUND");
       const { RecipeId } = req.body;
+      if (!RecipeId) throw new Error("RECIPE_NOT_FOUND");
       const { _id } = req.user;
 
       const data = {

@@ -85,6 +85,8 @@ class UserController {
 
       const result = await UserModel.findProfile(id);
 
+      if (!result) throw new Error("USER_NOT_FOUND");
+
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -123,6 +125,8 @@ class UserController {
     try {
       const { _id } = req.user;
       const { amount, targetUserId } = req.body;
+      if (!amount) throw new Error("AMOUNT_NOT_FOUND");
+      if (!targetUserId) throw new Error("USER_NOT_FOUND");
 
       await UserModel.decrementBalance(_id, parseInt(amount));
       await UserModel.incrementBalance(targetUserId, parseInt(amount));
