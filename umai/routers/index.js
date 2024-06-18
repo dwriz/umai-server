@@ -43,4 +43,8 @@ router.post("/create-payment-intent", UserController.createPaymentIntent);
 
 router.patch("/topup", UserController.addBalance);
 
+router.get("/user/:id", UserController.getProfile);
+
+router.post("/donate", UserController.donateBalance);
+
 module.exports = router;
