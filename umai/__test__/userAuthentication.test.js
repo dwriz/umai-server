@@ -9,7 +9,7 @@ const { RecipeModel } = require("../models/recipeModel");
 describe("User Authentication API", () => {
   afterAll(async () => {
     const collection = DB.collection("users");
-    await collection.deleteOne({ email: "testuser@example.com" });
+    await collection.deleteMany({ email: "testuser@example.com" });
   });
 
   test("POST /register : Register - success", async () => {

@@ -3,15 +3,14 @@ const { test, expect, describe, afterAll } = require("@jest/globals");
 const { app } = require("../app.js");
 const { DB } = require("../config/mongodb");
 const { ObjectId } = require("mongodb");
-const { RecipeController } = require("../controllers/recipeController");
 const { RecipeModel } = require("../models/recipeModel");
 
 describe("Recipe API", () => {
   afterAll(async () => {
     const userCollection = DB.collection("users");
-    await userCollection.deleteOne({ email: "testuser@example.com" });
+    await userCollection.deleteMany({ email: "testuser@example.com" });
     const recipeCollection = DB.collection("recipes");
-    await recipeCollection.deleteOne({ name: "Test Recipe" });
+    await recipeCollection.deleteMany({ name: "Test Recipe" });
   });
 
   test("POST /register : Create new account", async () => {

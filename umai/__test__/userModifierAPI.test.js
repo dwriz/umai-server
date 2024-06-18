@@ -9,8 +9,8 @@ const { RecipeModel } = require("../models/recipeModel");
 describe("User Modifier API", () => {
   afterAll(async () => {
     const userCollection = DB.collection("users");
-    await userCollection.deleteOne({ email: "testuser@example.com" });
-    await userCollection.deleteOne({ email: "testuser2@example.com" });
+    await userCollection.deleteMany({ email: "testuser@example.com" });
+    await userCollection.deleteMany({ email: "testuser2@example.com" });
   });
 
   test("POST /register : Create new account", async () => {
