@@ -26,6 +26,9 @@ const errorHandler = (error, req, res, next) => {
     case "EMAIL_NOT_REGISTERED":
       res.status(404).json({ message: "email not registered" });
       break;
+    case "PASSWORD_INVALID":
+      res.status(401).json({ message: "password invalid" });
+      break;
     case "AUTHENTICATION_INVALID":
       res.status(401).json({ message: "authentication invalid" });
       break;
