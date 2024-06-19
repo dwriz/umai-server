@@ -27,6 +27,8 @@ class UserModel {
       newUser.password = hashPassword(newUser.password);
       newUser.balance = 0;
       newUser.finishedRecipeCount = 0;
+      newUser.createdAt = new Date();
+      newUser.updatedAt = new Date();
 
       const result = await collection.insertOne({
         ...newUser,

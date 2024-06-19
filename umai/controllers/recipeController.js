@@ -46,6 +46,8 @@ class RecipeController {
         name,
         ingredients: JSON.parse(ingredients),
         UserId: _id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       for (const [

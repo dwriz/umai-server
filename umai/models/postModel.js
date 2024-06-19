@@ -11,6 +11,8 @@ class PostModel {
       const { insertedId } = await postCollection.insertOne({
         RecipeId: new ObjectId(RecipeId),
         UserId: new ObjectId(UserId),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       return await this.findById(insertedId);
